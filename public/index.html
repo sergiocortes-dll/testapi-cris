@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta Inteligente</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🔎 Consultas Inteligentes con Gemini + DB</h1>
+    <input type="text" id="consulta" placeholder="Ej: muéstrame los clientes con más de 3 cuentas">
+    <button onclick="enviarConsulta()">Consultar</button>
+    <pre id="resultado"></pre>
+  </div>
+
+  <script>
+    async function enviarConsulta() {
+      const consulta = document.getElementById("consulta").value;
+      const resultado = document.getElementById("resultado");
+
+      try {
+        const res = await fetch("/api/gemini", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt: consulta })
+        });
+
+        const data = await res.json();
+        resultado.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        resultado.textContent = "❌ Error en la consulta";
+      }
+    }
+  </script>
+</body>
+</html>
